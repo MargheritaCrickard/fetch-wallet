@@ -16,7 +16,7 @@ import * as AutoLocker from "./auto-lock-account/internal";
 import * as Analytics from "./analytics/internal";
 import * as Umbral from "./umbral/internal";
 import * as Messaging from "./messaging/internal";
-
+import * as AgentNameService from "./ans/internal";
 export * from "./persistent-memory";
 export * from "./chains";
 export * from "./ledger";
@@ -139,6 +139,7 @@ export function init(
   const umbralService = new Umbral.UmbralService(chainsService);
 
   const messagingService = new Messaging.MessagingService();
+  const nameService = new AgentNameService.NameService();
 
   Interaction.init(router, interactionService);
   PersistentMemory.init(router, persistentMemoryService);
@@ -156,6 +157,7 @@ export function init(
 
   Umbral.init(router, umbralService);
   Messaging.init(router, messagingService);
+  AgentNameService.init(router, nameService);
 
   return {
     initFn: async () => {
@@ -192,6 +194,7 @@ export function init(
       await analyticsService.init();
       await umbralService.init(keyRingService, permissionService);
       await messagingService.init(keyRingService);
+      await nameService.init(keyRingService);
     },
   };
 }
