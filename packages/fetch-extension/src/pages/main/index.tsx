@@ -26,11 +26,9 @@ import { getJWT } from "@utils/auth";
 import { store } from "@chatStore/index";
 import { setAccessToken, setWalletConfig } from "@chatStore/user-slice";
 import { getWalletConfig } from "@graphQL/config-api";
-import { useNavigate } from "react-router";
 
 export const MainPage: FunctionComponent = observer(() => {
   const intl = useIntl();
-  const navigate = useNavigate();
   const {
     chainStore,
     accountStore,
@@ -137,32 +135,6 @@ export const MainPage: FunctionComponent = observer(() => {
         });
     });
   }, [chainStore.current.chainId, accountInfo.bech32Address]);
-
-  useEffect(() => {
-    const handleLoad = () => {
-      const data: any = window.localStorage.getItem("verificationData");
-      const VerificationData = JSON.parse(data);
-      const CurrTime = Date.now();
-      if (
-        !VerificationData.isVerified &&
-        CurrTime - VerificationData.timestamp <= 300000
-      ) {
-        navigate("/agent-name-service/register-new/verify-domain", {
-          state: {
-            domainName: VerificationData.domain,
-            agentName: VerificationData.agent,
-            verificationString: VerificationData.approval_token,
-          },
-        });
-      }
-    };
-
-    window.addEventListener("load", handleLoad);
-
-    return () => {
-      window.removeEventListener("load", handleLoad);
-    };
-  }, []);
 
   return (
     <HeaderLayout

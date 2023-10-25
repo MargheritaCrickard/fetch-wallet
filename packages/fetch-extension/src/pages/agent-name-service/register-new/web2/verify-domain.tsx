@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { HeaderLayout } from "../../../../new-layouts";
 import { useNavigate, useLocation } from "react-router";
 import style from "../style.module.scss";
@@ -94,26 +94,6 @@ export const VerifyDomain = () => {
       }
     }
   };
-
-  const handleUnload = useCallback(async () => {
-    const data = {
-      isVerified: isVerified,
-      timestamp: Date.now(),
-      pathname: window.location.hash,
-      domain: domainName,
-      agent: agentName,
-      verification_string: verificationString,
-      approval_token: approvalToken,
-    };
-    window.localStorage.setItem("verificationData", JSON.stringify(data));
-  }, [agentName, approvalToken, domainName, isVerified, verificationString]);
-
-  useEffect(() => {
-    window.addEventListener("unload", handleUnload);
-    return () => {
-      window.removeEventListener("unload", handleUnload);
-    };
-  }, [handleUnload]);
 
   const copyVerificationString = useCallback(
     async (verificationString) => {
